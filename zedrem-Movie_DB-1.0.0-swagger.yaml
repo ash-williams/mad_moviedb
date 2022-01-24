@@ -1,0 +1,177 @@
+openapi: 3.0.0
+
+info:
+  description: The MovieDB API for use as examples in Mobile Apps
+  version: "1.0.0"
+  title: Movie DB API
+  contact:
+    name: Ashley Williams
+    email: ashley.williams@mmu.ac.uk
+
+tags:
+  - name: Movie Management
+    description: Operations available fswa  or managing movies
+
+    
+paths:
+  /movies:
+    get:
+      tags:
+        - Movie Management
+      summary: Get a list of all moveies
+      operationId: getAllMovies
+      description: Retrieve a list of all movies in the database
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllMovies'
+        500:
+          description: 'Server Error'
+    post:
+      tags: 
+        - movie Management
+      summary: Add a new movie
+      operationId: addmovie
+      description: Will create a new movie in the system. 
+      requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        500:
+          description: 'Server Error'
+  
+  /movies/{id}:
+    get:
+      tags:
+        - Movie Management
+      summary: Get movie information
+      operationId: getMovie
+      description: Retrieve all of the information about a single movie
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+        404:
+          description: 'Not Found'
+        500:
+          description: 'Server Error'
+    patch:
+      tags:
+        - Movie Management
+      summary: Update movie information
+      operationId: updateMovie
+      description: Update a movie
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/UpdateMovie'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad request'
+        404:
+          description: 'Not Found'
+        500:
+          description: 'Server Error'
+    delete:
+      tags:
+        - Movie Management
+      summary: Delete a movie
+      operationId: deleteMovie
+      description: Delete an existing movie
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          description: 'OK'
+        404:
+          description: 'Not Found'
+        500:
+          description: 'Server Error'
+ 
+  
+      
+components:
+  parameters:
+    id:
+      name: id
+      in: path
+      description: A unique integer ID for identifying a Movie
+      required: true
+      schema:
+        type: integer
+ 
+  
+  schemas:
+  
+    movie_id:
+      type: integer
+      example: 73
+    
+    movie_name:
+      type: string
+      example: Toy Story
+    
+    movie_year:
+      type: integer
+      example: 1995
+    
+    movie_director:
+      type: string
+      example: John Lasseter
+    
+    UpdateMovie:
+      type: object
+      properties:
+        movie_id:
+          $ref: '#/components/schemas/movie_id'
+        movie_name:
+          $ref: '#/components/schemas/movie_name'
+        movie_year:
+          $ref: '#/components/schemas/movie_year'
+        movie_director:
+          $ref: '#/components/schemas/movie_director'
+    
+    Movie:
+      type: object
+      required:
+        - movie_id
+        - movie_name
+        - movie_year
+        - movie_director
+      properties:
+        movie_id:
+          $ref: '#/components/schemas/movie_id'
+        movie_name:
+          $ref: '#/components/schemas/movie_name'
+        movie_year:
+          $ref: '#/components/schemas/movie_year'
+        movie_director:
+          $ref: '#/components/schemas/movie_director'
+       
+    AllMovies:
+      type: array
+      items:
+        $ref: '#/components/schemas/Movie'
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/zedrem/Movie_DB/1.0.0
